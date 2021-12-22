@@ -120,6 +120,21 @@ VendorAtom buildVendorAtomWithAnnotations() {
     return atom;
 }
 
+int sendVendorAtom(std::shared_ptr<IStats> service, int count) {
+    int failed_calls = 0;
+    int hal_calls = 0;
+
+    VendorAtom sampleAtom = buildVendorAtom();
+    for (int i = 0; i < count; ++i) {
+        const ndk::ScopedAStatus ret = service->reportVendorAtom(sampleAtom);
+        if (!ret.isOk()) {
+            ++failed_calls;
+        }
+        ++hal_calls;
+    }
+    return hal_calls - failed_calls;
+}
+
 int main(int argc, char* argv[]) {
     // get instance of the aidl version
     const std::string instance = std::string() + IStats::descriptor + "/default";
@@ -134,13 +149,13 @@ int main(int argc, char* argv[]) {
 
     static struct option opts[] = {
         {"VendorAtom", no_argument, 0, 'v'},
+        {"VendorAtomStorm", no_argument, 0, 's'},
+        {"VendorAtomBenchmark", no_argument, 0, 'b'},
         {"help", no_argument, 0, 'h'},
     };
-
+    int result = 0;
     int c;
-    int hal_calls = 0;
-    int failed_calls = 0;
-    while ((c = getopt_long(argc, argv, "vh", opts, nullptr)) != -1) {
+    while ((c = getopt_long(argc, argv, "vhsb", opts, nullptr)) != -1) {
         switch (c) {
             case 'h': {
                 show_help();
@@ -153,17 +168,51 @@ int main(int argc, char* argv[]) {
                 if (!ret.isOk()) {
                     std::cerr << "reportVendorAtom failed: " << ret.getServiceSpecificError()
                               << ". Message: " << ret.getMessage() << std::endl;
-                    ++failed_calls;
                 }
-                ++hal_calls;
                 VendorAtom sampleAtomWithAnnotations = buildVendorAtomWithAnnotations();
                 ret = service->reportVendorAtom(sampleAtomWithAnnotations);
                 if (!ret.isOk()) {
                     std::cerr << "reportVendorAtom failed: " << ret.getServiceSpecificError()
                               << ". Message: " << ret.getMessage() << std::endl;
-                    ++failed_calls;
                 }
-                ++hal_calls;
+
+                break;
+            }
+            case 'b': {
+                VendorAtom sampleAtom = buildVendorAtom();
+                int atomsToSend = 1;
+                int sent = 0;
+                do {
+                    atomsToSend <<= 1;
+                    std::cout << "Trying to send " << atomsToSend << " atoms" << std::endl;
+                    sent = sendVendorAtom(service, atomsToSend);
+                } while (atomsToSend == sent);
+
+                if (sent > 0) {
+                    std::cout << sent << " HAL methods called.\n";
+                    std::cout << "try: logcat | grep \"statsd.*0x1000\"\n";
+                }
+
+                if (sent != atomsToSend) {
+                    std::cout << "Failure happened during send size " << atomsToSend << std::endl;
+                }
+
+                break;
+            }
+            case 's': {
+                const int atomsToSend = 1024;
+                std::cout << "Trying to send " << atomsToSend << " atoms" << std::endl;
+                const int sent = sendVendorAtom(service, atomsToSend);
+
+                if (sent > 0) {
+                    std::cout << sent << " HAL methods called.\n";
+                    std::cout << "try: logcat | grep \"statsd.*0x1000\"\n";
+                }
+
+                if (sent != atomsToSend) {
+                    std::cout << "Failure happened during send size " << atomsToSend << std::endl;
+                }
+
                 break;
             }
             default: {
@@ -173,10 +222,5 @@ int main(int argc, char* argv[]) {
         }
     }
 
-    if (hal_calls > 0) {
-        std::cout << hal_calls << " HAL methods called.\n";
-        std::cout << "try: logcat | grep \"statsd.*0x1000\"\n";
-    }
-
-    return failed_calls;
+    return result;
 }
