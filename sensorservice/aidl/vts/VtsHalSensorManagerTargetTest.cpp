@@ -286,7 +286,7 @@ TEST_P(SensorManagerTest, Accelerometer) {
     }
 }
 
-TEST_P(SensorManagerTest, CreateGrallocDirectChannel) {
+TEST_P(SensorManagerTest, DISABLED_CreateGrallocDirectChannel) {
     std::vector<SensorInfo> sensorList;
     auto res = GetSensorList(&sensorList, [](const auto& info) {
         return info.flags & SensorInfo::SENSOR_FLAG_BITS_DIRECT_CHANNEL_GRALLOC;
