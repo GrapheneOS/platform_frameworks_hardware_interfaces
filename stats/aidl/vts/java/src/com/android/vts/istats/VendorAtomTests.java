@@ -146,7 +146,7 @@ public class VendorAtomTests extends DeviceTestCase implements IBuildReceiver {
 
     private List<EventMetricData> runVendorAtomDeviceTests(String testMethodName) throws Exception {
         runDeviceTestsOnVendorAtom(getDevice(), testMethodName);
-        Thread.sleep(AtomTestUtils.WAIT_TIME_LONG);
+        Thread.sleep(AtomTestUtils.WAIT_TIME_LONG * 2);
         // Sorted list of events in order in which they occurred.
         return ReportUtils.getEventMetricDataList(getDevice());
     }
