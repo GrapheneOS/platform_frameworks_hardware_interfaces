@@ -3,7 +3,6 @@
 
 # Framework HALs released in Android O
 
-956ce5e409246c35b20ed16c64fdca3ef225412cc7fed06723a835d1ef9c88e5 android.frameworks.schedulerservice@1.0::ISchedulingPolicyService
 3a62db403ef1f53a9b52a64d20be550537883e7cdb5a2569df755f5b2c7584b3 android.frameworks.sensorservice@1.0::IDirectReportChannel
 c5d28aaea039b81a4a1309134564f55df3aaa964e992870aa9cd5ffd201541eb android.frameworks.sensorservice@1.0::IEventQueue
 6f20cd7b412b278a54a423fb94f5e470087fbf6b13a3aa7dab14b3b2f2593dd4 android.frameworks.sensorservice@1.0::IEventQueueCallback
