@@ -7,7 +7,11 @@ cc_library_static {
     srcs: [
         "direct_channel_buffer_reader.cc",
     ],
-    cflags: ["-Wall", "-Werror"],
+    export_include_dirs: ["."],
+    cflags: [
+        "-Wall",
+        "-Werror",
+    ],
     shared_libs: [
         "libbase",
     ],
@@ -15,6 +19,7 @@ cc_library_static {
         "libhardware_headers",
     ],
     host_supported: true,
+    vendor_available: true,
 }
 
 cc_test {
