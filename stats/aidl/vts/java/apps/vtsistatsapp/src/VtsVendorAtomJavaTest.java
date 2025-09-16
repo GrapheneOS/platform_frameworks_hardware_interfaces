@@ -26,15 +26,15 @@ import android.frameworks.stats.VendorAtomValue;
 import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.util.Log;
+import androidx.test.runner.AndroidJUnit4;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
 
-@RunWith(JUnit4.class)
+@RunWith(AndroidJUnit4.class)
 public class VtsVendorAtomJavaTest {
     private static final String TAG = "VtsTest";
     Optional<IStats> statsService;
