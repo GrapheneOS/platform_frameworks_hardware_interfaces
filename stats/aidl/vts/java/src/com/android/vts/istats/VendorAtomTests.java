@@ -37,6 +37,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Function;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -86,6 +87,17 @@ public class VendorAtomTests extends DeviceTestCase implements IBuildReceiver {
         assertThat(vendorAtom.getIntValue()).isEqualTo(7);
     }
 
+    public void testReportGenericVendorAtom() throws Exception {
+        assertThat(isIStatsPresentOnDevice()).isTrue();
+        ConfigUtils.uploadConfigForPushedAtom(getDevice(), ISTATS_TEST_PKG,
+            TestVendorAtom.Atom.TEST_GENERIC_VENDOR_ATOM_REPORTED_FIELD_NUMBER);
+
+        List<EventMetricData> data = runVendorAtomDeviceTests("testReportGenericVendorAtom");
+        final TestVendorAtom.TestGenericVendorAtomReported vendorAtom = getGenericVendorAtom(data);
+        assertThat(vendorAtom.getReverseDomainName()).isEqualTo("com.test.domain");
+        assertThat(vendorAtom.getIntValue()).isEqualTo(77);
+    }
+
     public void testReportVendorAtomRepeated() throws Exception {
         assertThat(isIStatsPresentOnDevice()).isTrue();
         ConfigUtils.uploadConfigForPushedAtom(getDevice(), ISTATS_TEST_PKG,
@@ -128,20 +140,26 @@ public class VendorAtomTests extends DeviceTestCase implements IBuildReceiver {
         }
     }
 
+    private <T> T getSpecificVendorAtom(@Nonnull List<EventMetricData> data,
+        Function<TestVendorAtom.Atom, T> atomExtractor,
+        Function<TestVendorAtom.Atom, Boolean> presenceChecker) throws Exception {
+        assertThat(data).hasSize(1);
+        final TestVendorAtom.Atom atom =
+            TestVendorAtom.Atom.parseFrom(data.get(0).getAtom().toByteArray());
+        assertThat(presenceChecker.apply(atom)).isTrue();
+        return atomExtractor.apply(atom);
+    }
+
     private TestVendorAtom.TestVendorAtomReported getVendorAtom(@Nonnull List<EventMetricData> data)
         throws Exception {
-        assertThat(data).hasSize(1);
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        CodedOutputStream codedos = CodedOutputStream.newInstance(outputStream);
-        data.get(0).getAtom().writeTo(codedos);
-        codedos.flush();
+        return getSpecificVendorAtom(data, TestVendorAtom.Atom::getTestVendorAtomReported,
+            TestVendorAtom.Atom::hasTestVendorAtomReported);
+    }
 
-        ByteArrayInputStream inputStream = new ByteArrayInputStream(outputStream.toByteArray());
-        CodedInputStream codedis = CodedInputStream.newInstance(inputStream);
-        final TestVendorAtom.Atom atom = TestVendorAtom.Atom.parseFrom(codedis);
-        assertThat(atom.hasTestVendorAtomReported()).isTrue();
-
-        return atom.getTestVendorAtomReported();
+    private TestVendorAtom.TestGenericVendorAtomReported getGenericVendorAtom(
+        @Nonnull List<EventMetricData> data) throws Exception {
+        return getSpecificVendorAtom(data, TestVendorAtom.Atom::getTestGenericVendorAtomReported,
+            TestVendorAtom.Atom::hasTestGenericVendorAtomReported);
     }
 
     private List<EventMetricData> runVendorAtomDeviceTests(String testMethodName) throws Exception {
@@ -151,7 +169,9 @@ public class VendorAtomTests extends DeviceTestCase implements IBuildReceiver {
         return ReportUtils.getEventMetricDataList(getDevice());
     }
 
-    /** Runs device side tests from the com.android.vts.istats.vendoratom package. */
+    /**
+     * Runs device side tests from the com.android.vts.istats.vendoratom package.
+     */
     private static @Nonnull TestRunResult runDeviceTestsOnVendorAtom(
         ITestDevice device, @Nullable String testMethodName) throws DeviceNotAvailableException {
         return DeviceUtils.runDeviceTests(

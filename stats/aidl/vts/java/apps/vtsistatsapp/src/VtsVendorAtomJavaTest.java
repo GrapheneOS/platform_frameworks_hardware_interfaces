@@ -114,6 +114,27 @@ public class VtsVendorAtomJavaTest {
     }
 
     /*
+     * Test IStats::reportVendorAtom with generic vendor atom code - this event will be collected.
+     */
+    @Test
+    public void testReportGenericVendorAtom() {
+        VendorAtom atom = new VendorAtom();
+        atom.atomId = 349999; // TestGenericVendorAtomReported
+        atom.reverseDomainName = "com.test.domain";
+        atom.values = new VendorAtomValue[1];
+        atom.values[0] = VendorAtomValue.intValue(77);
+        try {
+            statsService.get().reportVendorAtom(atom);
+        } catch (NoSuchElementException e) {
+            Log.e(TAG, "Failed to get IStats service", e);
+            fail();
+        } catch (RemoteException e) {
+            Log.e(TAG, "Failed to log atom to IStats service", e);
+            fail();
+        }
+    }
+
+    /*
      * Test IStats::reportVendorAtom with repeated fields.
      */
     @Test
