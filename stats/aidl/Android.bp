@@ -33,6 +33,10 @@ aidl_interface {
             enabled: true,
         },
         rust: {
+            apex_available: [
+                "//apex_available:platform",
+                "com.android.virt"
+            ],
             enabled: true,
         },
     },

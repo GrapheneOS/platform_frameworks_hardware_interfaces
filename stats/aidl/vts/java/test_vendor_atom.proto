@@ -28,6 +28,8 @@ message Atom {
     oneof pushed {
         TestVendorAtomReported test_vendor_atom_reported = 109999
             [(android.os.statsd.module) = "istatsvts"];
+        TestGenericVendorAtomReported test_generic_vendor_atom_reported = 349999
+            [(android.os.statsd.module) = "istatsvts"];
     }
 }
 
@@ -54,4 +56,9 @@ message TestVendorAtomReported {
     repeated bool repeated_bool_value = 11;
     optional TestVendorAtomNestedMessage byte_array_value = 12
         [(android.os.statsd.log_mode) = MODE_BYTES];
+}
+
+message TestGenericVendorAtomReported {
+    optional string reverse_domain_name = 1;
+    optional int32 int_value = 2;
 }

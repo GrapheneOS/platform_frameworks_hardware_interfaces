@@ -26,15 +26,15 @@ import android.frameworks.stats.VendorAtomValue;
 import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.util.Log;
+import androidx.test.runner.AndroidJUnit4;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
 
-@RunWith(JUnit4.class)
+@RunWith(AndroidJUnit4.class)
 public class VtsVendorAtomJavaTest {
     private static final String TAG = "VtsTest";
     Optional<IStats> statsService;
@@ -102,6 +102,27 @@ public class VtsVendorAtomJavaTest {
         atom.reverseDomainName = "com.test.domain";
         atom.values = new VendorAtomValue[1];
         atom.values[0] = VendorAtomValue.intValue(7);
+        try {
+            statsService.get().reportVendorAtom(atom);
+        } catch (NoSuchElementException e) {
+            Log.e(TAG, "Failed to get IStats service", e);
+            fail();
+        } catch (RemoteException e) {
+            Log.e(TAG, "Failed to log atom to IStats service", e);
+            fail();
+        }
+    }
+
+    /*
+     * Test IStats::reportVendorAtom with generic vendor atom code - this event will be collected.
+     */
+    @Test
+    public void testReportGenericVendorAtom() {
+        VendorAtom atom = new VendorAtom();
+        atom.atomId = 349999; // TestGenericVendorAtomReported
+        atom.reverseDomainName = "com.test.domain";
+        atom.values = new VendorAtomValue[1];
+        atom.values[0] = VendorAtomValue.intValue(77);
         try {
             statsService.get().reportVendorAtom(atom);
         } catch (NoSuchElementException e) {
