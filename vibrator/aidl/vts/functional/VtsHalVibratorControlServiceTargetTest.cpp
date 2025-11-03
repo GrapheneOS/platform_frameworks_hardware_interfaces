@@ -122,27 +122,24 @@ TEST_P(VibratorControlServiceTest, SetAndClearVibrationParamsTest) {
     EXPECT_TRUE(service->registerVibratorController(vibratorController).isOk());
 
     // Set empty params
-    EXPECT_TRUE(service->setVibrationParams({}, vibratorController->getDefaultImpl()).isOk());
+    EXPECT_TRUE(service->setVibrationParams({}, nullptr).isOk());
 
     // Set single param
-    EXPECT_TRUE(
-        service
-            ->setVibrationParams({generateVibrationParam(ScaleParam::TYPE_ALARM, /* scale= */ 1)},
-                                 vibratorController->getDefaultImpl())
-            .isOk());
+    EXPECT_TRUE(service
+                    ->setVibrationParams(
+                        {generateVibrationParam(ScaleParam::TYPE_ALARM, /* scale= */ 1)}, nullptr)
+                    .isOk());
 
     // Set multiple params
     EXPECT_TRUE(service
                     ->setVibrationParams(
                         {generateVibrationParam(ScaleParam::TYPE_ALARM, /* scale= */ 1),
                          generateVibrationParam(ScaleParam::TYPE_RINGTONE, /* scale= */ 1)},
-                        vibratorController->getDefaultImpl())
+                        nullptr)
                     .isOk());
 
     // Clear params
-    EXPECT_TRUE(
-        service->clearVibrationParams(ScaleParam::TYPE_ALARM, vibratorController->getDefaultImpl())
-            .isOk());
+    EXPECT_TRUE(service->clearVibrationParams(ScaleParam::TYPE_ALARM, nullptr).isOk());
 
     EXPECT_TRUE(service->unregisterVibratorController(vibratorController).isOk());
 }
@@ -151,15 +148,12 @@ TEST_P(VibratorControlServiceTest, UnregisteredControllerSetAndClearVibrationPar
     std::shared_ptr<IVibratorController> vibratorController =
         ::ndk::SharedRefBase::make<VibratorController>();
 
-    EXPECT_TRUE(
-        service
-            ->setVibrationParams(generateVibrationParams(ScaleParam::TYPE_MEDIA, /* scale= */ 1),
-                                 vibratorController->getDefaultImpl())
-            .isOk());
+    EXPECT_TRUE(service
+                    ->setVibrationParams(
+                        generateVibrationParams(ScaleParam::TYPE_MEDIA, /* scale= */ 1), nullptr)
+                    .isOk());
 
-    EXPECT_TRUE(
-        service->clearVibrationParams(ScaleParam::TYPE_MEDIA, vibratorController->getDefaultImpl())
-            .isOk());
+    EXPECT_TRUE(service->clearVibrationParams(ScaleParam::TYPE_MEDIA, nullptr).isOk());
 }
 
 TEST_P(VibratorControlServiceTest, UnexpectedRequestTokenOnRequestVibrationParamsCompleteTest) {
