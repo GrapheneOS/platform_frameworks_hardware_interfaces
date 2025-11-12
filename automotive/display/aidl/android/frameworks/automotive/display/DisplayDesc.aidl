@@ -25,6 +25,9 @@ import android.frameworks.automotive.display.Rotation;
  * the EVS display. As an implementation detail, this may be a physical
  * display or a virtual display that is overlaid or mixed with another
  * presentation device.
+ *
+ * @deprecated EVS functionality and APIs are deprecated.
+ *             Use {@link android.view.Display} instead.
  */
 @VintfStability
 parcelable DisplayDesc {

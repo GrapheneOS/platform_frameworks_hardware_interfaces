@@ -32,15 +32,33 @@
 // later when a module using the interface is updated, e.g., Mainline modules.
 
 package android.frameworks.automotive.display;
+/**
+ * @deprecated EVS functionality and APIs are deprecated. OEMs should use the standard Android display classes, such as: <ul> <li>{@link android.hardware.display.DisplayManager}</li> <li>{@link android.view.Display}</li> <li>{@link android.view.WindowManager}</li> </ul>
+ */
 @VintfStability
 interface ICarDisplayProxy {
+  /**
+   * @deprecated EVS functionality and APIs are deprecated. Use {@link android.hardware.display.DisplayManager#getDisplays} instead.
+   */
   long[] getDisplayIdList();
+  /**
+   * @deprecated EVS functionality and APIs are deprecated. Use {@link android.view.Display} instead.
+   */
   android.frameworks.automotive.display.DisplayDesc getDisplayInfo(in long id);
   /**
-   * @deprecated As of android.frameworks.automotive.display-V2, this method is deprecated and replaced with getSurface().
+   * @deprecated EVS functionality and APIs are deprecated.
    */
   android.hardware.common.NativeHandle getHGraphicBufferProducer(in long id);
+  /**
+   * @deprecated EVS functionality and APIs are deprecated. Use {@link android.view.ViewManager#removeView} instead.
+   */
   void hideWindow(in long id);
+  /**
+   * @deprecated EVS functionality and APIs are deprecated. Use {@link android.view.ViewManager#addView} on a specific {@link android.view.Display} instead.
+   */
   void showWindow(in long id);
+  /**
+   * @deprecated EVS functionality and APIs are deprecated. OEMs should use the standard Android display classes, such as: <ul> <li>{@link android.hardware.display.DisplayManager}</li> <li>{@link android.view.Display}</li> <li>{@link android.view.SurfaceView}</li> <li>{@link android.view.TextureView}</li> <li>{@link android.view.WindowManager}</li> </ul>
+   */
   android.view.Surface getSurface(in long id);
 }
