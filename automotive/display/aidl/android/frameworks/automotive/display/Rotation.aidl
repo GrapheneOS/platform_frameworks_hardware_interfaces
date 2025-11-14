@@ -20,6 +20,9 @@ package android.frameworks.automotive.display;
  * Rotation:
  *
  * The required counterclockwise rotation of EVS camera stream and display.
+ *
+ * @deprecated EVS functionality and APIs are deprecated.
+ *             Use {@link android.view.Display#getRotation} instead.
  */
 @VintfStability
 @Backing(type="int")

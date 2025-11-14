@@ -33,6 +33,14 @@ import android.view.Surface;
  * ICarDisplayProxy.getHGraphicBufferProducer() and convert a returned NativeHandle into
  * HGraphicBufferProducer.  libbufferqueueconverter provides getSurfaceFromHGPB() to get
  * the surface from a converted HGraphicBufferProducer.
+ *
+ * @deprecated EVS functionality and APIs are deprecated.
+ *             OEMs should use the standard Android display classes, such as:
+ *             <ul>
+ *                 <li>{@link android.hardware.display.DisplayManager}</li>
+ *                 <li>{@link android.view.Display}</li>
+ *                 <li>{@link android.view.WindowManager}</li>
+ *             </ul>
  */
 @VintfStability
 interface ICarDisplayProxy {
@@ -40,6 +48,9 @@ interface ICarDisplayProxy {
      * Returns the stable identifiers of all available displays.
      *
      * @return A list of stable display identifiers.
+     *
+     * @deprecated EVS functionality and APIs are deprecated.
+     *             Use {@link android.hardware.display.DisplayManager#getDisplays} instead.
      */
     long[] getDisplayIdList();
 
@@ -49,6 +60,9 @@ interface ICarDisplayProxy {
      * @param  in id A stable ID of a target display.
      * @return A display descriptor
      * @throws STATUS_BAD_VALUE if a given display id is invalid
+     *
+     * @deprecated EVS functionality and APIs are deprecated.
+     *             Use {@link android.view.Display} instead.
      */
     DisplayDesc getDisplayInfo(in long id);
 
@@ -60,8 +74,8 @@ interface ICarDisplayProxy {
      * @throws STATUS_FAILED_TRANSACTION if it fails to create the surface or read the display
      *         information
      *         STATUS_BAD_VALUE if it fails to create HGraphicBufferProducer
-     * @deprecated As of android.frameworks.automotive.display-V2, this method is deprecated and
-     *             replaced with getSurface().
+     *
+     * @deprecated EVS functionality and APIs are deprecated.
      */
     NativeHandle getHGraphicBufferProducer(in long id);
 
@@ -70,6 +84,9 @@ interface ICarDisplayProxy {
      * to be invisible and to release the control over display.
      *
      * @param  in id A stable ID of a target display.
+     *
+     * @deprecated EVS functionality and APIs are deprecated.
+     *             Use {@link android.view.ViewManager#removeView} instead.
      */
     void hideWindow(in long id);
 
@@ -82,6 +99,10 @@ interface ICarDisplayProxy {
      *         STATUS_NAME_NOT_FOUND if it fails to find a display associated with the
      *         display token.
      *         Other STATUS_* if it fails to apply a SurfaceFlinger transaction.
+     *
+     * @deprecated EVS functionality and APIs are deprecated.
+     *             Use {@link android.view.ViewManager#addView} on a specific {@link
+     *             android.view.Display} instead.
      */
     void showWindow(in long id);
 
@@ -93,6 +114,16 @@ interface ICarDisplayProxy {
      * @throws STATUS_FAILED_TRANSACTION if it fails to create the surface or read the display
      *         information
      *         STATUS_BAD_VALUE if it fails to create a Surface object.
+     *
+     * @deprecated EVS functionality and APIs are deprecated.
+     *             OEMs should use the standard Android display classes, such as:
+     *             <ul>
+     *                 <li>{@link android.hardware.display.DisplayManager}</li>
+     *                 <li>{@link android.view.Display}</li>
+     *                 <li>{@link android.view.SurfaceView}</li>
+     *                 <li>{@link android.view.TextureView}</li>
+     *                 <li>{@link android.view.WindowManager}</li>
+     *             </ul>
      */
     Surface getSurface(in long id);
 }

@@ -32,6 +32,9 @@
 // later when a module using the interface is updated, e.g., Mainline modules.
 
 package android.frameworks.automotive.display;
+/**
+ * @deprecated EVS functionality and APIs are deprecated. Use {@link android.view.Display#getRotation} instead.
+ */
 @Backing(type="int") @VintfStability
 enum Rotation {
   ROTATION_0 = 0,
