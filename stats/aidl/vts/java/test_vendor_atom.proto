@@ -27,9 +27,9 @@ import "frameworks/proto_logging/stats/atom_field_options.proto";
 message Atom {
     oneof pushed {
         TestVendorAtomReported test_vendor_atom_reported = 109999
-            [(android.os.statsd.module) = "istatsvts"];
+            [(android.os.statsd.module_name) = "istatsvts"];
         TestGenericVendorAtomReported test_generic_vendor_atom_reported = 349999
-            [(android.os.statsd.module) = "istatsvts"];
+            [(android.os.statsd.module_name) = "istatsvts"];
     }
 }
 
