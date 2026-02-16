@@ -105,13 +105,12 @@ TEST_P(CarDisplayAidlTest, getIGBPObject) {
         ASSERT_NE(gfxBufferProducer, nullptr);
 
         // Create a Surface object.
-        android::SurfaceHolderUniquePtr surfaceHolder = getSurfaceFromHGBP(gfxBufferProducer);
-        ASSERT_NE(surfaceHolder, nullptr);
+        sp<ANativeWindow> nativeWindow = getNativeWindowFromHGBP(gfxBufferProducer);
+        ASSERT_NE(nativeWindow, nullptr);
 
         // Verify the size.
-        ANativeWindow* nativeWindow = getNativeWindow(surfaceHolder.get());
-        ASSERT_EQ(desc.width, ANativeWindow_getWidth(nativeWindow));
-        ASSERT_EQ(desc.height, ANativeWindow_getHeight(nativeWindow));
+        ASSERT_EQ(desc.width, ANativeWindow_getWidth(nativeWindow.get()));
+        ASSERT_EQ(desc.height, ANativeWindow_getHeight(nativeWindow.get()));
     }
 }
 
