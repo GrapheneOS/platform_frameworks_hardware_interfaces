@@ -37,7 +37,7 @@ import org.junit.runner.RunWith;
 @RunWith(AndroidJUnit4.class)
 public class VtsVendorAtomJavaTest {
     private static final String TAG = "VtsTest";
-    Optional<IStats> statsService;
+    Optional<IStats> statsService = Optional.empty();
 
     private static final int TestVendorAtomId = 109999;
 
@@ -51,17 +51,16 @@ public class VtsVendorAtomJavaTest {
             final String instanceName = IStats.DESCRIPTOR + "/default";
             if (!ServiceManager.isDeclared(instanceName)) {
                 Log.e(TAG, "IStats is not registered");
-                statsService = Optional.empty();
             } else {
                 statsService = Optional.ofNullable(
                     IStats.Stub.asInterface(ServiceManager.waitForDeclaredService(instanceName)));
             }
-            assertTrue(statsService.isPresent());
         } catch (SecurityException e) {
             Log.e(TAG, "Failed to connect to IStats service", e);
         } catch (NullPointerException e) {
             Log.e(TAG, "Failed to connect to IStats service", e);
         }
+        assertTrue(statsService.isPresent());
         Log.i(TAG, "Setup done");
     }
 
