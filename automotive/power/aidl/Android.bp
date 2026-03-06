@@ -37,6 +37,18 @@ aidl_interface {
             ],
             enabled: true,
         },
+        rust: {
+            enabled: true,
+            min_sdk_version: "36",
+            gen_mockall: true,
+            additional_rustlibs: [
+                "libmockall",
+            ],
+        },
+        ndk: {
+            enabled: true,
+            min_sdk_version: "36",
+        },
     },
     versions_with_info: [
         {
