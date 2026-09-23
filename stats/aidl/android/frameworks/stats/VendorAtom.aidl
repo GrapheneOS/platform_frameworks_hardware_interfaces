@@ -90,4 +90,6 @@ parcelable VendorAtom {
     * Vector of annotations associated with VendorAtom
     */
     @nullable Annotation[] atomAnnotations;
+
+    long timestampNanos = 0;
 }
