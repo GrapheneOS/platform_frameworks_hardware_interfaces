@@ -15,7 +15,9 @@
 //
 package android.frameworks.stats;
 
+import android.frameworks.stats.IVendorPullAtomCallback;
 import android.frameworks.stats.VendorAtom;
+import android.frameworks.stats.VendorPullAtomMetadata;
 
 /**
  * IStats is an interface that allows clients to report specific hardware
@@ -32,4 +34,11 @@ interface IStats {
      *        atom ID and server-side configs.
      */
     oneway void reportVendorAtom(in VendorAtom vendorAtom);
+
+    @JavaPassthrough(annotation="@android.annotation.RequiresPermission(android.Manifest.permission.REGISTER_STATS_PULL_ATOM)")
+    oneway void setPullAtomCallback(int atomTag, in @nullable VendorPullAtomMetadata metadata,
+                                    in IVendorPullAtomCallback pullerCallback);
+
+    @JavaPassthrough(annotation="@android.annotation.RequiresPermission(android.Manifest.permission.REGISTER_STATS_PULL_ATOM)")
+    oneway void clearPullAtomCallback(int atomTag);
 }

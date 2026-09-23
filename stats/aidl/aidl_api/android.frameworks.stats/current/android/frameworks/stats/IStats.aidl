@@ -35,4 +35,6 @@ package android.frameworks.stats;
 @VintfStability
 interface IStats {
   oneway void reportVendorAtom(in android.frameworks.stats.VendorAtom vendorAtom);
+  oneway @JavaPassthrough(annotation="@android.annotation.RequiresPermission(android.Manifest.permission.REGISTER_STATS_PULL_ATOM)") void setPullAtomCallback(int atomTag, in @nullable android.frameworks.stats.VendorPullAtomMetadata metadata, in android.frameworks.stats.IVendorPullAtomCallback pullerCallback);
+  oneway @JavaPassthrough(annotation="@android.annotation.RequiresPermission(android.Manifest.permission.REGISTER_STATS_PULL_ATOM)") void clearPullAtomCallback(int atomTag);
 }

@@ -28,6 +28,9 @@ aidl_interface {
         },
         java: {
             enabled: true,
+            additional_libs: [
+                "framework-annotations-lib",
+            ],
         },
         ndk: {
             enabled: true,
@@ -52,5 +55,5 @@ aidl_interface {
 
     ],
     host_supported: true,
-    frozen: true,
+    frozen: false,
 }
